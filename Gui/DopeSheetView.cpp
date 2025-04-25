@@ -3202,6 +3202,8 @@ DopeSheetView::initializeGL()
         return;
     }
 
+    makeCurrent();
+
     _imp->generateKeyframeTextures();
 }
 
