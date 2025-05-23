@@ -1753,9 +1753,15 @@ ViewerGL::setLut(int lut)
     _imp->displayingImageLut = (ViewerColorSpaceEnum)lut;
 }
 
+void
+ViewerGL::setDither(bool dither)
+{
+    // always running in the main thread
+    assert( qApp && qApp->thread() == QThread::currentThread() );
+    _imp->enableDisplayDither = dither;
+}   
+
 #if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
-#define QMouseEventLocalPos(e) ( e->posF() )
-#else
 #define QMouseEventLocalPos(e) ( e->localPos() )
 #endif
 

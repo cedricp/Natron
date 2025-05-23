@@ -86,6 +86,7 @@ ViewerGL::Implementation::Implementation(ViewerGL* this_,
     , zoomOrPannedSinceLastFit(false)
     , oldClick()
     , displayingImageLut(eViewerColorSpaceSRGB)
+    , enableDisplayDither(false)
     , ms(eMouseStateUndefined)
     , hs(eHoverStateNothing)
     , textRenderingColor(200, 200, 200, 255)
@@ -877,6 +878,7 @@ ViewerGL::Implementation::activateShaderRGB(int texIndex)
     shaderRGB->setUniformValue("lut", (GLint)displayingImageLut);
     float gamma = displayTextures[texIndex].gamma;
     shaderRGB->setUniformValue("gamma", gamma);
+    shaderRGB->setUniformValue("dither", (GLint)enableDisplayDither);
 }
 
 bool
