@@ -56,6 +56,13 @@ find_package(Boost COMPONENTS headers serialization CONFIG)
 if(WIN32)
     # Prevent looking in the registry so that the MinGW python can be found.
     set(Python3_FIND_REGISTRY NEVER)
+    # Search qtdeploy executable
+    find_program(DEPLOYQT_EXE windeployqt.exe)
+    if(NOT ${DEPLOYQT_EXE} STREQUAL "")
+        set(DEPLOYQT_FOUND 1)
+    else()
+        set(DEPLOYQT_FOUND 0)
+    endif()
 endif()
 find_package(Python3 COMPONENTS Interpreter Development)
 

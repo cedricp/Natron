@@ -63,22 +63,22 @@ install(FILES ../Gui/Resources/Images/natronIcon256_linux.png
 install(FILES ../Gui/Resources/Images/natronProjectIcon_linux.png
     DESTINATION "${CMAKE_INSTALL_DATADIR}/pixmaps")
 
-IF(WIN32)
+IF(WIN32 AND DEPLOYQT_FOUND)
     SET(CONFIG_FILE ${CMAKE_CURRENT_BINARY_DIR}/install_deps_${CMAKE_BUILD_TYPE}.cmake)
 
     # Find and install needed DLLs
     file(GENERATE OUTPUT
     "${CONFIG_FILE}" CONTENT 
     [[
-        EXECUTE_PROCESS(COMMAND ${MINGWPATH}/windeployqt.exe ${INSTALL_BINPATH}/Natron.exe)
+        EXECUTE_PROCESS(COMMAND del ${INSTALL_BINPATH}/*.dll)
         SET(TARGET_APP $<TARGET_FILE:Natron>)
         FILE(GET_RUNTIME_DEPENDENCIES
-            RESOLVED_DEPENDENCIES_VAR deps_resolved
-            UNRESOLVED_DEPENDENCIES_VAR deps_unresolved
-            LIBRARIES ${TARGET_APP}
-            DIRECTORIES ${CMAKELIBPATH}
-            PRE_EXCLUDE_REGEXES "api-ms-*" "ext-ms-*"
-            POST_EXCLUDE_REGEXES ".*system32/.*\\.dll" "${INSTALL_BINPATH}"
+        RESOLVED_DEPENDENCIES_VAR deps_resolved
+        UNRESOLVED_DEPENDENCIES_VAR deps_unresolved
+        LIBRARIES ${TARGET_APP}
+        DIRECTORIES ${CMAKELIBPATH}
+        PRE_EXCLUDE_REGEXES "api-ms-*" "ext-ms-*"
+        POST_EXCLUDE_REGEXES ".*system32/.*\\.dll" 
         )
         MESSAGE(STATUS "Resolving runtime dependencies for ${TARGET_APP}")
         FOREACH(dep ${deps_resolved})
@@ -88,13 +88,15 @@ IF(WIN32)
         FOREACH(dep ${deps_unresolved})
         MESSAGE(WARNING "Runtime dependency ${dep} could not be resolved.")
         ENDFOREACH()
+        EXECUTE_PROCESS(COMMAND ${DEPLOYQT_EXE} --compiler-runtime ${INSTALL_BINPATH}/Natron.exe)
         ]]
         )
         
-    GET_FILENAME_COMPONENT(MINGW_CC_PATH  ${CMAKE_C_COMPILER} PATH)
-    SET(MINGWPATH "${MINGW_CC_PATH}")
-    INSTALL(CODE "set(CMAKELIBPATH \"${CMAKE_SYSTEM_LIBRARY_PATH};${CMAKE_MINGW_SYSTEM_LIBRARY_PATH};${MINGWPATH}\")")
-    INSTALL(CODE "SET(MINGWPATH ${MINGWPATH})")
-    INSTALL(CODE "SET(INSTALL_BINPATH ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR})")
+    INSTALL(CODE "SET(INSTALL_BINPATH \"${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}\")")
+    INSTALL(CODE "SET(DEPLOYQT_EXE \"${DEPLOYQT_EXE}\")")
+    INSTALL(CODE "SET(CMAKELIBPATH \"${CMAKE_SYSTEM_LIBRARY_PATH};${CMAKE_MINGW_SYSTEM_LIBRARY_PATH};${MINGWPATH}\")")
     INSTALL(SCRIPT ${CONFIG_FILE})
+    INSTALL(DIRECTORY ${Python3_LIBRARY_DIRS}/python${Python3_VERSION_MAJOR}.${Python3_VERSION_MINOR}
+            DESTINATION lib
+            PATTERN "*.pyc" EXCLUDE)
 ENDIF()

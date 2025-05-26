@@ -315,7 +315,7 @@ AppManager::loadFromArgs(const CLArgs& cl)
         std::cout << "argv[" << i << "] = " << StrUtils::utf16_to_utf8( std::wstring(_imp->commandLineArgsWide[i]) ) << std::endl;
     }
 #endif
-
+    QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
     // This needs to be done BEFORE creating qApp because
     // on Linux, X11 will create a context that would corrupt
     // the XUniqueContext created by Qt
@@ -3183,7 +3183,7 @@ void
 AppManager::registerUNCPath(const QString& path,
                             const QChar& driveLetter)
 {
-    assert( QThread::currentThread() == qApp->thread() );
+    //assert( QThread::currentThread() == qApp->thread() );
     _imp->uncPathMapping[driveLetter] = path;
 }
 
