@@ -335,7 +335,7 @@ AppManager::loadFromArgs(const CLArgs& cl)
 
     // This should fix GL widgets when undocked
     QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
-
+    QCoreApplication::setAttribute(Qt::AA_DontCreateNativeWidgetSiblings);
     // This needs to be done BEFORE creating qApp because
     // on Linux, X11 will create a context that would corrupt
     // the XUniqueContext created by Qt

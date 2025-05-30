@@ -1252,6 +1252,14 @@ ViewerGL::initializeGL()
         throw std::runtime_error("OpenGL was not loaded");
     }
     _imp->initializeGL();
+
+    // connect(context(), &QOpenGLContext::aboutToBeDestroyed,
+    //       [this]()
+    //       {
+    //         makeCurrent();
+    //         printf("ViewerGL::initializeGL: context %p is about to be destroyed\n", context());
+    //         // Unload everything here from the dying context to be later reuploaded to GPU on the next draw to the new context.
+    //       });
 }
 
 GLuint
@@ -1761,9 +1769,9 @@ ViewerGL::setDither(bool dither)
     _imp->enableDisplayDither = dither;
 }   
 
-#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
+//#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
 #define QMouseEventLocalPos(e) ( e->localPos() )
-#endif
+//#endif
 
 void
 ViewerGL::mousePressEvent(QMouseEvent* e)
