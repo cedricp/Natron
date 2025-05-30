@@ -132,7 +132,7 @@ const char* blackFrag = R"(
     };
 )";
 
-const char *histogramComputation_frag = R"(
+const char* histogramComputation_frag = R"(
     #extension GL_ARB_texture_rectangle : enable
     uniform sampler2DRect Tex;
     uniform int channel;
@@ -142,7 +142,7 @@ const char *histogramComputation_frag = R"(
     }
 )";
 
-const char *histogramComputationVertex_vert = R"(
+const char* histogramComputationVertex_vert = R"(
     #extension GL_ARB_texture_rectangle : enable
     uniform sampler2DRect Tex;
     uniform int channel;
@@ -173,7 +173,7 @@ const char *histogramComputationVertex_vert = R"(
     }
 )";
 
-const char *histogramRendering_frag = R"(
+const char* histogramRendering_frag = R"(
     #extension GL_ARB_texture_rectangle : enable
     uniform sampler2DRect HistogramTex;
     uniform sampler2DRect MaximumRedTex;
@@ -195,7 +195,7 @@ const char *histogramRendering_frag = R"(
     }
 )";
 
-const char *histogramRenderingVertex_vert = R"(
+const char* histogramRenderingVertex_vert = R"(
     #extension GL_ARB_texture_rectangle : enable
     uniform sampler2DRect HistogramTex;
     uniform sampler2DRect MaximumRedTex;
@@ -234,7 +234,9 @@ const char* minimal_vert = R"(
     gl_TexCoord[0]=gl_MultiTexCoord0;
     gl_Position = ftransform();
 ;
-const char *histogramMaximum_frag =
+)";
+
+const char *histogramMaximum_frag = R"(
     #extension GL_ARB_texture_rectangle : enable
     uniform sampler2DRect Tex;
     void main()
@@ -265,6 +267,5 @@ const char *histogramMaximum_frag =
         gl_FragColor = vec4(max(max(a.r,b.r),max(c.r,d.r)),0.0,0.0,1.0);
     }
 )";
-
 
 NATRON_NAMESPACE_EXIT
